@@ -93,8 +93,8 @@ class Reactions:
         #Dunque l'istanza Reagent relativa al prodotto è anche la classe principale per tale elemento che tiene conto delle quantità di tale elemento richiesta dalle precedenti reazioni
         self.reactions = {} 
                
-        #Stack con le relazioni da processare
-        self.stack = [] 
+        #Coda con le relazioni da processare
+        self.queue = [] 
         self.oreQty = 0
         with open(fileName) as f:
             for line in f:
@@ -111,16 +111,16 @@ class Reactions:
         #       print(self.reactions[key] )
         #print("-----------------")
                 
-        #Inserisco la prima relazione nello stack
+        #Inserisco la prima relazione nella coda
         fuelReac = self.reactions['FUEL']
         fuelReac.prod.useInReaction(fuelQty) 
-        self.addToStack(fuelReac)
+        self.addToQueue(fuelReac)
 
-    #Aggiunge una reazione nello stack, se non presente, altrimenti ne aggiorna la quantità richiesta
-    def addToStack(self, obj): 
-        if not obj in self.stack:
+    #Aggiunge una reazione nella coda, se non presente, altrimenti ne aggiorna la quantità richiesta
+    def addToQueue(self, obj): 
+        if not obj in self.queue:
             #print("add: " + obj.prod.name + " (" + str(obj.prod.reqQuantity) + ")")
-            self.stack.insert(0, obj)
+            self.queue.insert(0, obj)
 
 
     def processReaction(self, k = 0):
@@ -130,15 +130,15 @@ class Reactions:
         k = k + 1
         
         try:
-            reaction = self.stack.pop()  #Prossima relazione
+            reaction = self.queue.pop()  #Prossima relazione
 
             #print("pop " + reaction.prod.name)
             if reaction.prod.usedIn > 0:
-                self.addToStack(reaction)
+                self.addToQueue(reaction)
                 self.processReaction(k+1)
                 return
         except:
-            return #lo stack è vuoto
+            return #la coda è vuota
 
         elName = reaction.prod.name #Nome dell'elemento X prodotto dalla relazione
         reactionQty = reaction.prod.qty  #Quantità di X ottenuta dalla reazione R
@@ -150,7 +150,7 @@ class Reactions:
         
         #print("Produce " + reaction.prod.name + " (qty: " + str(n*reactionQty) + ", requested: " + str(reaction.prod.reqQuantity) + ", used: " + str(reaction.prod.reqQuantity-elQty) + ")")                        
         
-        #Scorre i reagenti, aggiorna le quantità richieste e li inserisce nello stack (se non presenti)
+        #Scorre i reagenti, aggiorna le quantità richieste e li inserisce nella coda (se non presenti)
         for reag in reaction.reags:
             if reag.name=='ORE':
                 self.oreQty = self.oreQty + reag.qty*n
@@ -158,9 +158,9 @@ class Reactions:
             else:
                 reagMain = self.reactions[reag.name]  #Reazione di produzione di reag
                 reagMain.prod.useInReaction(reag.qty*n) #Aggiorna la quantità richiesta
-                self.addToStack(reagMain) #Aggiunge la relazione allo stack
+                self.addToQueue(reagMain) #Aggiunge la relazione alla coda
 
-        #print(self.stack)
+        #print(self.queue)
         self.processReaction(k)
         
 #-----------------------------------------------------------------------------

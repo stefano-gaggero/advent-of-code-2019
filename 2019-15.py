@@ -172,30 +172,30 @@ def explorePath(maze, write=False):
     return None
    
     
-def fillFromPoint(maze, fifo):
-    fifo0 = []
+def fillFromPoint(maze, stack):
+    stack0 = []
     
-    while len(fifo)>0:
-        pos = fifo.pop()
+    while len(stack)>0:
+        pos = stack.pop()
     
         for i in range(1, 5):
            newPos = tuple(np.add(pos, Maze.MOVES[i])) 
            if maze.grid[newPos] == Maze.EXPLORED:
-               fifo0.append(newPos)
+               stack0.append(newPos)
                maze.grid[newPos] = Maze.FILLED
-    return fifo0
+    return stack0
            
            
 def fill(maze, startPoint):
-    fifo = []
-    fifo.append(startPoint)
+    queue = []
+    queue.append(startPoint)
     step = 0
-    while len(fifo)>0:
+    while len(queue)>0:
         
         if step%100==0:
             maze.draw()
             
-        fifo = fillFromPoint(maze, fifo)
+        queue = fillFromPoint(maze, queue)
         step = step + 1
         
     print("2---->" + str(step-1))  #400
