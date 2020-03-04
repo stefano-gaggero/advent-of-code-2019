@@ -126,6 +126,9 @@ class Program:
 
     def addInput(self, val):        
         self.inputs.append(val)
+        
+    def addInputs(self, vals):        
+        self.inputs.extend(vals)        
                 
     def getOutput(self, clearOutput=False):
         ret = self.outputs[self.oc]
@@ -135,11 +138,16 @@ class Program:
             self.oc = 0            
         return ret
     
-    def getLastOutput(self, clearOutput=False):
-        return self.outputs[len(self.outputs)-1]
-    
+   
     def getOutputs(self, clearOutput=False):
         res = self.outputs.copy()
+        if clearOutput:
+            self.outputs = []
+            self.oc = 0            
+        return res
+
+    def getLastOutput(self, clearOutput=False):
+        res = self.outputs[len(self.outputs)-1]
         if clearOutput:
             self.outputs = []
             self.oc = 0            

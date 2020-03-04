@@ -1,0 +1,48 @@
+north
+north
+take sand
+south
+west
+east
+south
+south
+take space heater
+south
+east
+take loom
+west
+north
+west
+take wreath
+south
+take space law space brochure
+south
+take pointer
+east
+west
+west
+east
+north
+west
+east
+north
+east
+north
+west
+south
+take planetoid
+north
+west
+take festive hat
+north
+south
+south
+west
+drop sand
+drop space heater
+drop loom
+drop wreath
+drop space law space brochure
+drop pointer
+drop planetoid
+drop festive hat
